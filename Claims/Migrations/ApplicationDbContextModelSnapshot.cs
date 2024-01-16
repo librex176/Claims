@@ -36,12 +36,6 @@ namespace Claims.Migrations
                     b.Property<bool>("Envio")
                         .HasColumnType("bit");
 
-                    b.Property<int>("IdDireccion")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdDireccionFk")
-                        .HasColumnType("int");
-
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -51,18 +45,16 @@ namespace Claims.Migrations
 
                     b.HasKey("IdClientePk");
 
-                    b.HasIndex("IdDireccion");
-
                     b.ToTable("Clientes");
                 });
 
             modelBuilder.Entity("Claims.Models.Direccion", b =>
                 {
-                    b.Property<int>("IdDireccionPk")
+                    b.Property<int>("IdDireccion")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdDireccionPk"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdDireccion"));
 
                     b.Property<string>("CalleNumero")
                         .IsRequired()
@@ -86,11 +78,16 @@ namespace Claims.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("IdCliente")
+                        .HasColumnType("int");
+
                     b.Property<string>("NombreRemitente")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("IdDireccionPk");
+                    b.HasKey("IdDireccion");
+
+                    b.HasIndex("IdCliente");
 
                     b.ToTable("Direcciones");
                 });
@@ -126,15 +123,15 @@ namespace Claims.Migrations
                     b.ToTable("ListasCartas");
                 });
 
-            modelBuilder.Entity("Claims.Models.Cliente", b =>
+            modelBuilder.Entity("Claims.Models.Direccion", b =>
                 {
-                    b.HasOne("Claims.Models.Direccion", "Direccion")
+                    b.HasOne("Claims.Models.Cliente", "Cliente")
                         .WithMany()
-                        .HasForeignKey("IdDireccion")
+                        .HasForeignKey("IdCliente")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Direccion");
+                    b.Navigation("Cliente");
                 });
 
             modelBuilder.Entity("Claims.Models.ListaCartas", b =>

@@ -11,10 +11,6 @@ namespace Claims.Models
         public decimal Deuda { get; set; }
         public bool Envio { get; set; }
         public bool PagoEnvio { get; set; }
-        public int IdDireccionFk { get; set; }
-
-        // Relación con la tabla Direccion
-        [ForeignKey("IdDireccion")]
-        public virtual Direccion Direccion { get; set; }
+       
     }
 }

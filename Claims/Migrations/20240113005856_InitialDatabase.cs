@@ -12,11 +12,28 @@ namespace Claims.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Clientes",
+                columns: table => new
+                {
+                    IdClientePk = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Deuda = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Envio = table.Column<bool>(type: "bit", nullable: false),
+                    PagoEnvio = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clientes", x => x.IdClientePk);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Direcciones",
                 columns: table => new
                 {
-                    IdDireccionPk = table.Column<int>(type: "int", nullable: false)
+                    IdDireccion = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    IdCliente = table.Column<int>(type: "int", nullable: false),
                     NombreRemitente = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CalleNumero = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Colonia = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -27,30 +44,12 @@ namespace Claims.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Direcciones", x => x.IdDireccionPk);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Clientes",
-                columns: table => new
-                {
-                    IdClientePk = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Deuda = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Envio = table.Column<bool>(type: "bit", nullable: false),
-                    PagoEnvio = table.Column<bool>(type: "bit", nullable: false),
-                    IdDireccionFk = table.Column<int>(type: "int", nullable: false),
-                    IdDireccion = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clientes", x => x.IdClientePk);
+                    table.PrimaryKey("PK_Direcciones", x => x.IdDireccion);
                     table.ForeignKey(
-                        name: "FK_Clientes_Direcciones_IdDireccion",
-                        column: x => x.IdDireccion,
-                        principalTable: "Direcciones",
-                        principalColumn: "IdDireccionPk",
+                        name: "FK_Direcciones_Clientes_IdCliente",
+                        column: x => x.IdCliente,
+                        principalTable: "Clientes",
+                        principalColumn: "IdClientePk",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -78,9 +77,9 @@ namespace Claims.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Clientes_IdDireccion",
-                table: "Clientes",
-                column: "IdDireccion");
+                name: "IX_Direcciones_IdCliente",
+                table: "Direcciones",
+                column: "IdCliente");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ListasCartas_IdCliente",
@@ -92,13 +91,13 @@ namespace Claims.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Direcciones");
+
+            migrationBuilder.DropTable(
                 name: "ListasCartas");
 
             migrationBuilder.DropTable(
                 name: "Clientes");
-
-            migrationBuilder.DropTable(
-                name: "Direcciones");
         }
     }
 }

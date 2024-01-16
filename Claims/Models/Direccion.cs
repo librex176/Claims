@@ -6,7 +6,8 @@ namespace Claims.Models
     public class Direccion
     {
         [Key]
-        public int IdDireccionPk { get; set; }
+        public int IdDireccion { get; set; }
+        public int IdCliente { get; set; }
         public string NombreRemitente { get; set; }
         public string CalleNumero { get; set; }
         public string Colonia { get; set; }
@@ -16,6 +17,10 @@ namespace Claims.Models
         public int Celular { get; set; }
 
         
+
+        // Relación con la tabla Direccion
+        [ForeignKey("IdCliente")]
+        public virtual Cliente Cliente { get; set; }
     }
 
 }
