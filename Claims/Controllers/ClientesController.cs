@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Claims.Data;
+﻿using Claims.Data;
 using Claims.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Claims.Controllers
 {
@@ -18,7 +13,11 @@ namespace Claims.Controllers
         {
             _context = context;
         }
-
+        public IActionResult ClientesConDeuda()
+        {
+            var clientesConDeuda = _context.Clientes.Where(c => c.Deuda > 0).ToList();
+            return View("Index", clientesConDeuda);
+        }
         // GET: Clientes
         public async Task<IActionResult> Index()
         {
@@ -154,4 +153,5 @@ namespace Claims.Controllers
             return _context.Clientes.Any(e => e.IdClientePk == id);
         }
     }
+
 }
